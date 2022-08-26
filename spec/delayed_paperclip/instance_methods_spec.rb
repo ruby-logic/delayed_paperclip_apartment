@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DelayedPaperclip::InstanceMethods do
+describe DelayedPaperclipApartment::InstanceMethods do
   before :each do
     reset_dummy
   end
@@ -46,7 +46,7 @@ describe DelayedPaperclip::InstanceMethods do
 
   describe "#enqueue_post_processing_for" do
     it "enqueues the instance and image" do
-      DelayedPaperclip.expects(:enqueue).with("Dummy", dummy.id, :image)
+      DelayedPaperclipApartment.expects(:enqueue).with("Dummy", dummy.id, :image)
       dummy.enqueue_post_processing_for("image")
     end
   end

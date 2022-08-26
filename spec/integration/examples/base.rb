@@ -1,12 +1,12 @@
 shared_examples "base usage" do
   before :each do
-    DelayedPaperclip.options[:url_with_processing] = true
+    DelayedPaperclipApartment.options[:url_with_processing] = true
     reset_dummy
   end
 
   describe "normal paperclip" do
     before :each do
-      DelayedPaperclip.options[:url_with_processing] = false
+      DelayedPaperclipApartment.options[:url_with_processing] = false
       reset_dummy :with_processed => false
     end
 
@@ -251,7 +251,7 @@ shared_examples "base usage" do
 
   describe "reprocess_without_delay" do
     before :each do
-      DelayedPaperclip.options[:url_with_processing] = true
+      DelayedPaperclipApartment.options[:url_with_processing] = true
       reset_dummy :paperclip => {
                     :styles => {
                       :thumbnail => '12x12'

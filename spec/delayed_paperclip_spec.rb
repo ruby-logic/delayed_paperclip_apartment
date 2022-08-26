@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe DelayedPaperclip do
+describe DelayedPaperclipApartment do
   before :each do
     reset_dummy
   end
 
   describe ".options" do
     it ".options returns basic options" do
-      DelayedPaperclip.options.should == {:background_job_class => DelayedPaperclip::ProcessJob,
+      DelayedPaperclipApartment.options.should == {:background_job_class => DelayedPaperclipApartment::ProcessJob,
                                           :url_with_processing => true,
                                           :processing_image_url => nil,
                                           :queue => "paperclip"}
@@ -16,14 +16,14 @@ describe DelayedPaperclip do
 
   describe ".processor" do
     it ".processor returns processor" do
-      DelayedPaperclip.processor.should == DelayedPaperclip::ProcessJob
+      DelayedPaperclipApartment.processor.should == DelayedPaperclipApartment::ProcessJob
     end
   end
 
   describe ".enqueue" do
     it "delegates to processor" do
-      DelayedPaperclip::ProcessJob.expects(:enqueue_delayed_paperclip).with("Dummy", 1, :image)
-      DelayedPaperclip.enqueue("Dummy", 1, :image)
+      DelayedPaperclipApartment::ProcessJob.expects(:enqueue_delayed_paperclip).with("Dummy", 1, :image)
+      DelayedPaperclipApartment.enqueue("Dummy", 1, :image)
     end
   end
 
@@ -35,7 +35,7 @@ describe DelayedPaperclip do
       dummy_stub.expects(:where).with(id: dummy.id).returns([])
       Dummy.expects(:unscoped).returns(dummy_stub)
       dummy.image.expects(:process_delayed!).never
-      DelayedPaperclip.process_job("Dummy", dummy.id, :image)
+      DelayedPaperclipApartment.process_job("Dummy", dummy.id, :image)
     end
 
     it "finds dummy and calls #process_delayed!" do
@@ -43,7 +43,7 @@ describe DelayedPaperclip do
       dummy_stub.expects(:where).with(id: dummy.id).returns([dummy])
       Dummy.expects(:unscoped).returns(dummy_stub)
       dummy.image.expects(:process_delayed!)
-      DelayedPaperclip.process_job("Dummy", dummy.id, :image)
+      DelayedPaperclipApartment.process_job("Dummy", dummy.id, :image)
     end
   end
 

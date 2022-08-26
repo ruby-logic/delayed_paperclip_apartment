@@ -1,8 +1,10 @@
+This gem is a fork of [delayed_paperclip](https://github.comhjrgifford/delayed_paperclip) with support for multi-tenant applications using [apartment](https://github.com/influitive/apartment) gem.
+
 Delayed::Paperclip [![Build Status](https://travis-ci.org/jrgifford/delayed_paperclip.svg?branch=master)](https://travis-ci.org/jrgifford/delayed_paperclip) [![Code Climate](https://codeclimate.com/github/jrgifford/delayed_paperclip.png)](https://codeclimate.com/github/jrgifford/delayed_paperclip)
 ======================================================================================
 
 
-DelayedPaperclip lets you process your [Paperclip](http://github.com/thoughtbot/paperclip)
+DelayedPaperclipApartment lets you process your [Paperclip](http://github.com/thoughtbot/paperclip)
 attachments in a background task with [ActiveJob](https://github.com/rails/rails/tree/master/activejob)
 
 Why?
@@ -21,14 +23,14 @@ Installation
 Install the gem:
 
 ```
-gem install delayed_paperclip
+gem install delayed_paperclip_apartment # Not available yet!
 ```
 
 Or even better, add it to your Gemfile.
 
 ```
 source "https://rubygems.org"
-gem "delayed_paperclip"
+gem "delayed_paperclip_apartment", git: 'https://github.com/ruby-logic/delayed_paperclip_apartment.git'
 ```
 
 Usage
@@ -200,7 +202,7 @@ end
 #### Reprocess Without Delay
 
 This is useful if you don’t want the background job. It accepts
-individual styles too. Take note, normal `reprocess!` does not accept styles as arguments anymore. It will delegate to DelayedPaperclip and
+individual styles too. Take note, normal `reprocess!` does not accept styles as arguments anymore. It will delegate to DelayedPaperclipApartment and
 reprocess all styles.
 
 ```ruby
@@ -231,10 +233,10 @@ Defaults
 --------
 
 Global defaults for all delayed_paperclip instances in your app can be
-defined by changing the DelayedPaperclip.options Hash, this can be useful for setting a default ‘processing image,’ so you won’t have to define it in every `process_in_background` definition.
+defined by changing the DelayedPaperclipApartment.options Hash, this can be useful for setting a default ‘processing image,’ so you won’t have to define it in every `process_in_background` definition.
 
 If you’re using Rails you can define a Hash with default options in
-config/application.rb or in any of the config/environments/\*.rb files on `config.delayed_paperclip_defaults`, these will get merged into DelayedPaperclip.options as your Rails app boots. An example:
+config/application.rb or in any of the config/environments/\*.rb files on `config.delayed_paperclip_defaults`, these will get merged into DelayedPaperclipApartment.options as your Rails app boots. An example:
 
 ```ruby
 module YourApp
@@ -297,19 +299,7 @@ Does it work with s3?
 
 Yes.
 
-Contributing
-------------
+What about this Apartment integration?
+--------------------------------------
 
-Checkout out [CONTRIBUTING](https://github.com/jrgifford/delayed_paperclip/blob/master/CONTRIBUTING). Run specs with:
-
-```
-# Rspec on all versions
-bundle exec appraisal install
-bundle exec appraisal rake
-
-# Rspec on latest stable gems
-bundle exec rake
-
-# Rspec on specific rails version
-bundle exec appraisal 5.0 rake
-```
+Glad you asked. The gem will automatically detect schema you're using before uploading your file and pass its name to Sidekiq - so it wouldn't crash because of unknown instance id. You can check out commit which added that functionality. If anything needs improvement, feel free to open a pull request or issue and we'll look into it.

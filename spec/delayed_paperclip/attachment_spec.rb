@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DelayedPaperclip::Attachment do
+describe DelayedPaperclipApartment::Attachment do
   before :each do
     reset_dummy(dummy_options)
   end

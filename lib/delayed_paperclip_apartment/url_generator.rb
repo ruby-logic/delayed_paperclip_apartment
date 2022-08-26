@@ -1,7 +1,7 @@
 require 'uri'
 require 'paperclip/url_generator'
 
-module DelayedPaperclip
+module DelayedPaperclipApartment 
   class UrlGenerator < ::Paperclip::UrlGenerator
     def initialize(attachment, _compatibility = nil)
       @attachment = attachment

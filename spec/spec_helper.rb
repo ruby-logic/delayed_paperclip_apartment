@@ -15,8 +15,8 @@ end
 require 'paperclip/railtie'
 Paperclip::Railtie.insert
 
-require 'delayed_paperclip/railtie'
-DelayedPaperclip::Railtie.insert
+require 'delayed_paperclip_apartment/railtie'
+DelayedPaperclipApartment::Railtie.insert
 
 # silence deprecation warnings in rails 4.2
 # in Rails 5 this setting is deprecated and has no effect
@@ -52,8 +52,8 @@ RSpec.configure do |config|
 end
 
 def reset_global_default_options
-  DelayedPaperclip.options.merge!({
-    :background_job_class => DelayedPaperclip::ProcessJob,
+  DelayedPaperclipApartment.options.merge!({
+    :background_job_class => DelayedPaperclipApartment::ProcessJob,
     :url_with_processing  => true,
     :processing_image_url => nil
   })

@@ -1,16 +1,16 @@
-require 'delayed_paperclip/process_job'
-require 'delayed_paperclip/attachment'
-require 'delayed_paperclip/url_generator'
-require 'delayed_paperclip/railtie' if defined?(Rails)
+require 'delayed_paperclip_apartment/process_job'
+require 'delayed_paperclip_apartment/attachment'
+require 'delayed_paperclip_apartment/url_generator'
+require 'delayed_paperclip_apartment/railtie' if defined?(Rails)
 
-module DelayedPaperclip
+module DelayedPaperclipApartment
   class << self
     def options
       @options ||= {
-        :background_job_class => DelayedPaperclip::ProcessJob,
-        :url_with_processing  => true,
-        :processing_image_url => nil,
-        :queue => "paperclip"
+        background_job_class: DelayedPaperclipApartment::ProcessJob,
+        url_with_processing: true,
+        processing_image_url: nil,
+        queue: "paperclip"
       }
     end
 
@@ -19,12 +19,15 @@ module DelayedPaperclip
     end
 
     def enqueue(instance_klass, instance_id, attachment_name)
-      processor.enqueue_delayed_paperclip(instance_klass, instance_id, attachment_name)
+      schema = Apartment::Tenant.current || nil
+      processor.enqueue_delayed_paperclip(instance_klass, instance_id, attachment_name, schema)
     end
 
-    def process_job(instance_klass, instance_id, attachment_name)
+    def process_job(instance_klass, instance_id, attachment_name, schema)
       instance = instance_klass.constantize.unscoped.where(id: instance_id).first
       return if instance.blank?
+
+      Apartment::Tenant.switch!(schema) if schema != nil
 
       instance.
         send(attachment_name).
@@ -50,11 +53,11 @@ module DelayedPaperclip
       only_process_default = paperclip_definitions[name][:only_process]
       only_process_default ||= []
       {
-        :priority => 0,
-        :only_process => only_process_default,
-        :url_with_processing => DelayedPaperclip.options[:url_with_processing],
-        :processing_image_url => DelayedPaperclip.options[:processing_image_url],
-        :queue => DelayedPaperclip.options[:queue]
+        priority: 0,
+        only_process: only_process_default,
+        url_with_processing: DelayedPaperclipApartment.options[:url_with_processing],
+        processing_image_url: DelayedPaperclipApartment.options[:processing_image_url],
+        queue: DelayedPaperclipApartment.options[:queue]
       }.each do |option, default|
         paperclip_definitions[name][:delayed][option] = options.key?(option) ? options[option] : default
       end
@@ -101,7 +104,7 @@ module DelayedPaperclip
     end
 
     def enqueue_post_processing_for name
-      DelayedPaperclip.enqueue(self.class.name, read_attribute(:id), name.to_sym)
+      DelayedPaperclipApartment.enqueue(self.class.name, read_attribute(:id), name.to_sym)
     end
 
     def prepare_enqueueing_for name

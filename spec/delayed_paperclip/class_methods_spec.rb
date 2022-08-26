@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DelayedPaperclip::ClassMethods do
+describe DelayedPaperclipApartment::ClassMethods do
   before :each do
     reset_dummy(with_processed: false)
   end

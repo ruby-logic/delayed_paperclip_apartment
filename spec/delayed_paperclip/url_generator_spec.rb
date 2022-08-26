@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DelayedPaperclip::UrlGenerator do
+describe DelayedPaperclipApartment::UrlGenerator do
   before :each do
     reset_dummy({})
   end
@@ -76,7 +76,7 @@ describe DelayedPaperclip::UrlGenerator do
               only_process: [:background]
             }
           )
-          url_generator = DelayedPaperclip::UrlGenerator.new(attachment, {})
+          url_generator = DelayedPaperclipApartment::UrlGenerator.new(attachment, {})
           attachment.stubs(:updated_at).returns updated_at
           url_generator.for(:style_name, {escape: true, timestamp: !!updated_at})
         end
@@ -103,7 +103,7 @@ describe DelayedPaperclip::UrlGenerator do
     context "without delayed_default_url" do
       let(:attachment) { make_attachment(paperclip: {url: "/blah/url.jpg"}) }
 
-      subject { DelayedPaperclip::UrlGenerator.new(attachment) }
+      subject { DelayedPaperclipApartment::UrlGenerator.new(attachment) }
 
       before :each do
         subject.stubs(:delayed_default_url?).returns false
@@ -112,7 +112,7 @@ describe DelayedPaperclip::UrlGenerator do
       context "with original file name" do
         it "returns options url" do
           attachment.stubs(:original_filename).returns "blah"
-          subjec = DelayedPaperclip::UrlGenerator.new(attachment)
+          subjec = DelayedPaperclipApartment::UrlGenerator.new(attachment)
           subjec.stubs(:delayed_default_url?).returns false
           subjec.most_appropriate_url.should == "/blah/url.jpg"
         end
@@ -179,7 +179,7 @@ describe DelayedPaperclip::UrlGenerator do
 
   describe "#timestamp_possible?" do
     let(:attachment) { make_attachment }
-    subject { DelayedPaperclip::UrlGenerator.new(attachment) }
+    subject { DelayedPaperclipApartment::UrlGenerator.new(attachment) }
 
     context "with delayed_default_url" do
       before :each do
@@ -205,7 +205,7 @@ describe DelayedPaperclip::UrlGenerator do
 
   describe "#delayed_default_url?" do
     let(:attachment) { make_attachment }
-    subject { DelayedPaperclip::UrlGenerator.new(attachment) }
+    subject { DelayedPaperclipApartment::UrlGenerator.new(attachment) }
 
     before :each do
       attachment.stubs(:job_is_processing).returns false

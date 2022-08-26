@@ -1,4 +1,4 @@
-module DelayedPaperclip
+module DelayedPaperclipApartment 
   module Attachment
     attr_accessor :job_is_processing
 
