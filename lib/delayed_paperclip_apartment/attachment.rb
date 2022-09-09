@@ -48,9 +48,10 @@ module DelayedPaperclipApartment
     end
 
     def process_delayed!
+      styles_to_process = delayed_only_process.empty? ? self.styles.keys.map(&:to_s) : delayed_only_process
       self.job_is_processing = true
       self.post_processing = true
-      reprocess!(*delayed_only_process)
+      reprocess!(*styles_to_process)
       self.job_is_processing = false
       update_processing_column
     end
