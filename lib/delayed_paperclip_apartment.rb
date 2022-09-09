@@ -24,10 +24,10 @@ module DelayedPaperclipApartment
     end
 
     def process_job(instance_klass, instance_id, attachment_name, schema)
+      Apartment::Tenant.switch!(schema) if schema != nil
+
       instance = instance_klass.constantize.unscoped.where(id: instance_id).first
       return if instance.blank?
-
-      Apartment::Tenant.switch!(schema) if schema != nil
 
       instance.
         send(attachment_name).
